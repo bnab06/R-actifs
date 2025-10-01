@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import bcrypt
 
 # -------------------------
-# Connexion à PostgreSQL (Supabase)
+# Connexion PostgreSQL (Supabase)
 # -------------------------
 def get_conn():
     dsn = st.secrets.get("DATABASE_URL", None) or os.getenv("DATABASE_URL")
@@ -19,7 +19,10 @@ def get_conn():
         else:
             dsn += "?sslmode=require"
 
-    return psycopg2.connect(dsn)
+    try:
+        return psycopg2.connect(dsn)
+    except Exception as e:
+        raise RuntimeError(f"🚨 Erreur de connexion PostgreSQL : {e}")
 
 
 # -------------------------
